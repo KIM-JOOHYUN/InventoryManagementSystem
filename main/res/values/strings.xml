@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Inventory Manager</string>
+    <string name="app_main">Inventory Manager</string>
+    <string name="login_title">Login</string>
+    <string name="id">ID : </string>
+    <string name="hint_id">Enter your id</string>
+    <string name="pw">PW : </string>
+    <string name="hint_pw">Enter your password</string>
+    <string name="login_btn">Login</string>
+
+    <string name="all_pd">All Product</string>
+    <string name="search_pd">Search Product</string>
+    <string name="bar_pd">Barcode Scan</string>
+
+    <string name="show_prod">Product Information</string>
+    <string name="prod_name">Product Name :  </string>
+    <string name="prod_num">Product number :  </string>
+    <string name="prod_count">Stock :  </string>
+    <string name="prod_comp">Company :  </string>
+    <string name="prod_size">Size :  </string>
+    <string name="prod_color">Color :  </string>
+    <string name="backBtn">Back</string>
+
+    <string name="search">Search</string>
+    <string name="sProdName">Product Name</string>
+    <string name="sProdNum">Product Number</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
