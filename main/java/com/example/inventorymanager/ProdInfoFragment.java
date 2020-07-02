@@ -44,9 +44,10 @@ public class ProdInfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         ViewGroup rootview = (ViewGroup)inflater.inflate(R.layout.fragment_prod_info, container, false);
         // Inflate the layout for this fragment
-
+        //Fragment manager and transaction for changing fragment
         fmanager = getFragmentManager();
         ftrans = fmanager.beginTransaction();
+        //create new fragment objects to change
         allFrag = new AllFragment();
         searchFrag = new SearchFragment();
         barFrag = new BarcodeFragment();
@@ -59,7 +60,7 @@ public class ProdInfoFragment extends Fragment {
         prod_size = rootview.findViewById(R.id.pd_size);
         prod_color = rootview.findViewById(R.id.pd_color);
         backBtn = rootview.findViewById(R.id.back_btn);
-
+        //get product information from bundle
         Bundle getBundle = this.getArguments();
         pd_name = getBundle.getString("pd_name", "");
         pd_num = getBundle.getString("pd_num","");
@@ -76,7 +77,8 @@ public class ProdInfoFragment extends Fragment {
         prod_num.setText(pd_num);
         prod_size.setText(pd_size);
         prod_color.setText(pd_color);
-
+        //Back button
+        //come : before page(if 'all', the user press back button, go back to 'all fragment')
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

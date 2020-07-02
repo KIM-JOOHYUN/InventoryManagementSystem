@@ -1,6 +1,5 @@
 package com.example.inventorymanager;
 
-
 import android.content.Context;
 import android.os.Bundle;
 
@@ -27,41 +26,44 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class AllFragment  extends Fragment implements ListAdapter.OnListItemLongSelectedInterface, ListAdapter.OnListItemSelectedInterface {
-    private Context context;
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
+    private Context context;  // context
+    private RecyclerView recyclerView;  // recyclerView to show all product of the company
+    private RecyclerView.Adapter adapter; // recyclerView's adapter
     private RecyclerView.LayoutManager layoutManger;
-    private ArrayList<Prod> arrayList;
-    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();;
+    private ArrayList<Prod> arrayList;  // arrayList to store the company's products
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(); // database from firebase
+    private RecyclerView.LayoutManager mLayoutManager; // layout manager for recyclerView
 
-    private RecyclerView.LayoutManager mLayoutManager;
-
+    //Fragment manager and transaction for changing fragment
     FragmentManager fmanager;
     FragmentTransaction ftrans;
 
-    ProdInfoFragment infoFrag;
-    MenuFragment mainFrag;
-    String comp;
+    ProdInfoFragment infoFrag; //Product information fragment
+    MenuFragment mainFrag; // main menu fragment
+    String comp; // company name(business name)
 
-    Button backBtn;
+    Button backBtn; // Back button
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.fragment_all, container, false);
+        //set fragment manager and transaction
         fmanager = getFragmentManager();
         ftrans = fmanager.beginTransaction();
+        //create new fragment objects to change
         infoFrag = new ProdInfoFragment();
         mainFrag = new MenuFragment();
+        //find recyclerView
         recyclerView = rootView.findViewById(R.id.recyclerView);
 
         arrayList = new ArrayList<Prod>();
 
         context = rootView.getContext();
-
+        //get company name from bundle
         Bundle bundle = this.getArguments();
         comp = bundle.getString("comp");
-
+        //When back button is pressed, move to main fragment
         backBtn = rootView.findViewById(R.id.back_btn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +74,7 @@ public class AllFragment  extends Fragment implements ListAdapter.OnListItemLong
                 ftrans.replace(R.id.container, mainFrag).commit();
             }
         });
-
+        //read data from fire base(mDatabase) and find the company's products and store the products to arrayList
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -87,6 +89,7 @@ public class AllFragment  extends Fragment implements ListAdapter.OnListItemLong
                     }
                     /**/
                 }
+                //check
                 Log.d("checkId",Integer.toString(arrayList.size()));
                 adapter.notifyDataSetChanged();
             }
@@ -96,16 +99,18 @@ public class AllFragment  extends Fragment implements ListAdapter.OnListItemLong
             }
 
         });
-
+        //set Layout manager
         mLayoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(mLayoutManager);
-
+        //set adapter with array list
         adapter = new ListAdapter(rootView.getContext(),arrayList,this,this);
-
+        //set adapter to recyclerView
         recyclerView.setAdapter(adapter);
 
         return rootView;
     }
+    //If a product selected, create a bundle and put the product information to the bundle
+    //send the bundle to infoFragment(which shows product information) and change the fragment to infoFragment
     @Override
     public void onItemSelected(View v, int position) {
         ListAdapter.ViewHolder viewHolder = (ListAdapter.ViewHolder)recyclerView.findViewHolderForAdapterPosition(position);

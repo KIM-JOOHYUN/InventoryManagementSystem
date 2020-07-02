@@ -31,22 +31,22 @@ public class LoginFragment extends Fragment {
     String id;
     String pw;
 
-    EditText idTxt;
-    EditText pwTxt;
-    Button loginBtn;
-    private ArrayList<User> arrayList;
+    EditText idTxt; // id
+    EditText pwTxt; //password
+    Button loginBtn;  //login button
+    private ArrayList<User> arrayList; // all user data
 
-    boolean idSuccess = false;
-    boolean pwSuccess = false;
-    boolean acc = false;
-    String comp = "";
-
+    boolean idSuccess = false; // if the id(user typed) is in database, it is True
+    boolean pwSuccess = false; // if the pw(user typed) is in database, it is True
+    boolean acc = false;  // if the user is authorized user, it is True
+    String comp = ""; //company name(business name)
+    //Fragment manager and transaction for changing fragment
     FragmentManager fmanager;
     FragmentTransaction ftrans;
 
-    MenuFragment menuF;
+    MenuFragment menuF; // main menu fragment
 
-    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();;
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(); // database from firebase
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,10 +80,12 @@ public class LoginFragment extends Fragment {
             }
         });// mDatabase end
 
+        //get id, pw from EditText
         idTxt = rootview.findViewById(R.id.id_txt);
         pwTxt = rootview.findViewById(R.id.pw_txt);
         loginBtn = rootview.findViewById(R.id.login_btn);
 
+        //when the login button is pressed, check that the login account is in database
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,19 +113,27 @@ public class LoginFragment extends Fragment {
                     pwSuccess = false;
                 } // for end
 
+                //check user
+                //if id and pw is correct and it is account of authorized user, login is success and change fragment to main menu
                 if(idSuccess && pwSuccess && acc){
                     Toast.makeText(getActivity(),"Login Success", Toast.LENGTH_LONG).show();
+                    //create new bundle and put the company name into bundle and send it to main menu fragment
                     Bundle bundle = new Bundle();
                     bundle.putString("comp",comp);
                     menuF.setArguments(bundle);
+                    //check
                     Log.d("checkId","usercompany : "+comp);
                     ftrans.replace(R.id.container, menuF).commit();
-                } else if(!idSuccess){
+                }
+                //if id is wrong
+                else if(!idSuccess){
                     Toast.makeText(getActivity(),"ID is wrong!\nCheck your ID.", Toast.LENGTH_LONG).show();
                 }
+                //if pw is wrong
                 else if(!pwSuccess){
                     Toast.makeText(getActivity(),"PW is wrong!\nCheck your Password.", Toast.LENGTH_LONG).show();
                 }
+                //if she/he is not authorized user.
                 else{
                     Toast.makeText(getActivity(),"You are not an authorized user.", Toast.LENGTH_LONG).show();
                 }

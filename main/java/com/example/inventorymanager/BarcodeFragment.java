@@ -33,31 +33,34 @@ import java.util.List;
 public class BarcodeFragment extends Fragment {
     private CaptureManager capture;
     private DecoratedBarcodeView barcodeView;
-
+    //Fragment manager and transaction for changing fragment
     FragmentManager fmanager;
     FragmentTransaction ftrans;
-    ProdInfoFragment infoFrag;
-    MenuFragment menuFrag;
-    Button backBtn;
 
-    String comp;
+    ProdInfoFragment infoFrag; // the fragment which shows information of product
+    MenuFragment menuFrag; // main menu fragment
+    Button backBtn; // back button
 
-    private Context context;
-    private ArrayList<Prod> arrayList;
-    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    String comp;  //company name(business name)
+
+    private Context context; // context
+    private ArrayList<Prod> arrayList; // arrayList to store the company's products
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(); // database from firebase
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.fragment_barcode, container, false);
+        //set fragment manager and transaction
         fmanager = getFragmentManager();
         ftrans = fmanager.beginTransaction();
+        //create new fragment objects to change
         infoFrag = new ProdInfoFragment();
         menuFrag = new MenuFragment();
 
         arrayList = new ArrayList<Prod>();
 
         context = rootView.getContext();
-
+        //When back button is pressed, move to main fragment
         backBtn = rootView.findViewById(R.id.back_btn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,9 +71,10 @@ public class BarcodeFragment extends Fragment {
                 ftrans.replace(R.id.container, menuFrag).commit();
             }
         });
+        //get company name from bundle
         Bundle bundle = this.getArguments();
         comp = bundle.getString("comp");
-
+        //read data from fire base(mDatabase) and find the company's products and store the products to arrayList
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -92,13 +96,15 @@ public class BarcodeFragment extends Fragment {
             }
 
         });
-
+        //set barcode view
         barcodeView = (DecoratedBarcodeView)rootView.findViewById(R.id.dbvBarcode);
-
+        //set capture manager
         capture = new CaptureManager(this.getActivity(), barcodeView);
+        //scan the barcode and decode the barcode
         capture.initializeFromIntent(getActivity().getIntent(),savedInstanceState);
         capture.decode();
         barcodeView.decodeContinuous(new BarcodeCallback() {
+            //when the barcode is scanned, run readBarcode method
             @Override
             public void barcodeResult(BarcodeResult result) {
                 readBarcode(result.toString());
@@ -127,8 +133,11 @@ public class BarcodeFragment extends Fragment {
         super.onSaveInstanceState(outState);
         capture.onSaveInstanceState(outState);
     }
+
     public void readBarcode(String barcode){
         //Toast.makeText(getActivity().getApplicationContext(),barcode,Toast.LENGTH_SHORT).show();
+        //find the product which barcode number is scanned barcode, and create a bundle and put the product information to the bundle
+        //send the bundle to infoFragment(which shows product information) and change the fragment to infoFragment
         for(Prod i : arrayList){
             if(i.barcode.equals(barcode)){
                 Bundle bundle = new Bundle();

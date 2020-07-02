@@ -1,17 +1,16 @@
 package com.example.inventorymanager;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class User {
-    public String name;
-    public String authority;
-    public String business;
-    public String email;
-    public String id;
-    public Boolean approval;
-    public String password;
+    public String name; // user name
+    public String authority; // user authority
+    public String business;  // user business(company)
+    public String email; //user email
+    public String id; //user id
+    public Boolean approval;  //whether user is approval or not
+    public String password;  //user password
 
     public User() {
     }

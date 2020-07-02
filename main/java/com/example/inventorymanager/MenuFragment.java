@@ -13,6 +13,7 @@ import android.widget.Button;
 
 
 public class MenuFragment extends Fragment {
+    //Fragment manager and transaction for changing fragment
     FragmentManager fmanager;
     FragmentTransaction ftrans;
     String comp;
@@ -29,8 +30,10 @@ public class MenuFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootview = (ViewGroup)inflater.inflate(R.layout.fragment_menu, container, false);
+        //set fragment manager and transaction
         fmanager = getFragmentManager();
         ftrans = fmanager.beginTransaction();
+        //get company name from bundle
         Bundle getBundle = this.getArguments();
         comp = getBundle.getString("comp","");
 
@@ -38,6 +41,7 @@ public class MenuFragment extends Fragment {
         sBtn = rootview.findViewById(R.id.search_btn);
         bBtn = rootview.findViewById(R.id.barcode_btn);
 
+        //when all button is pressed, move to all fragment
         allBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,7 +51,7 @@ public class MenuFragment extends Fragment {
                 ftrans.replace(R.id.container, allFrag).commit();
             }
         });
-
+        //when search button is pressed, move to search fragment
         sBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,7 +61,7 @@ public class MenuFragment extends Fragment {
                 ftrans.replace(R.id.container, searchFrag).commit();
             }
         });
-
+        //when barcode button is pressed, move to barcode fragment
         bBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

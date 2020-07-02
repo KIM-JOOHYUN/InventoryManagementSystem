@@ -60,8 +60,10 @@ public class SearchFragment extends Fragment implements ListAdapter.OnListItemLo
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.fragment_search, container, false);
+        //Fragment manager and transaction for changing fragment
         fmanager = getFragmentManager();
         ftrans = fmanager.beginTransaction();
+        //create new fragment objects to change
         infoFrag = new ProdInfoFragment();
         menuFrag = new MenuFragment();
         searchValue = rootView.findViewById(R.id.searchText);
@@ -71,7 +73,7 @@ public class SearchFragment extends Fragment implements ListAdapter.OnListItemLo
         backupList = new ArrayList<Prod>();
 
         context = rootView.getContext();
-
+        //get company name from bundle
         Bundle bundle = this.getArguments();
         comp = bundle.getString("comp");
 
@@ -81,6 +83,7 @@ public class SearchFragment extends Fragment implements ListAdapter.OnListItemLo
         sNum = rootView.findViewById(R.id.sNum);
         recyclerView = rootView.findViewById(R.id.recyclerView);
 
+        //read data from fire base(mDatabase) and find the company's products and store the products to arrayList
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -112,7 +115,8 @@ public class SearchFragment extends Fragment implements ListAdapter.OnListItemLo
         adapter = new ListAdapter(rootView.getContext(),arrayList,this,this);
         recyclerView.setAdapter(adapter);
 
-
+        //when search button is pressed, check the radio, and find the products which user wants and change the listView
+        //user can search product by product name or product number
         searchBtn = rootView.findViewById(R.id.search_btn);
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,6 +126,7 @@ public class SearchFragment extends Fragment implements ListAdapter.OnListItemLo
                 int radioId = searchType.getCheckedRadioButtonId();
                 value = searchValue.getText().toString();
                 if(value.length() > 0){
+                    //search by product name
                     if(radioId == sName.getId()){
                         final int size = arrayList.size();
                         for(int i = size - 1; i>= 0; i--) {
@@ -131,7 +136,9 @@ public class SearchFragment extends Fragment implements ListAdapter.OnListItemLo
                                 adapter.notifyItemRemoved(i);
                             }
                         }
-                    }else if(radioId == sNum.getId()){
+                    }
+                    //search by product number
+                    else if(radioId == sNum.getId()){
                         final int size = arrayList.size();
                         for(int i = size - 1; i>= 0; i--) {
                             Log.d("checkNum",arrayList.get(i).productCode + "  "+value);
@@ -148,7 +155,7 @@ public class SearchFragment extends Fragment implements ListAdapter.OnListItemLo
                 Log.d("checkData",backupList.toString());
             }
         });
-
+        //When back button is pressed, move to main fragment
         backBtn = rootView.findViewById(R.id.back_btn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,6 +169,8 @@ public class SearchFragment extends Fragment implements ListAdapter.OnListItemLo
 
         return rootView;
     }
+    //If a product selected, create a bundle and put the product information to the bundle
+    //send the bundle to infoFragment(which shows product information) and change the fragment to infoFragment
     @Override
     public void onItemSelected(View v, int position) {
         ListAdapter.ViewHolder viewHolder = (ListAdapter.ViewHolder)recyclerView.findViewHolderForAdapterPosition(position);
