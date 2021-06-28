@@ -16,4 +16,7 @@ Application for inventory system
 
   You can check the product's inventory information by barcode scanning.
   
-  
+  ![image](https://user-images.githubusercontent.com/64013256/123593461-80237c00-d829-11eb-8b11-09d0614d3667.png)
+
+- Inventory System Web page version(Github link) : https://github.com/Yangheerim/Inventory-System
+
